@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { TasksComponent } from './tasks/tasks.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [TasksComponent],
+  template: `
+    <app-tasks></app-tasks>
+  `
 })
-export class AppComponent {
-  title = 'taskflow-frontend';
-}
+export class AppComponent {}

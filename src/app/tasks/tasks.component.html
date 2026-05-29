@@ -1,0 +1,91 @@
+<div class="container">
+  <h1>📋 TaskFlow Pro</h1>
+  <p class="subtitle">Gestiona tus tareas con Angular 19 + Spring Boot</p>
+  
+  <!-- Mostrar errores -->
+  @if (error()) {
+    <div class="error-message">
+      ❌ {{ error() }}
+      <button (click)="error.set(null)">✖</button>
+    </div>
+  }
+  
+  <!-- Formulario para nueva tarea -->
+  <div class="add-task">
+    <input
+      type="text"
+      [(ngModel)]="newTask.title"
+      placeholder="¿Qué necesitas hacer?"
+      (keyup.enter)="createTask()"
+    />
+    <input
+      type="text"
+      [(ngModel)]="newTask.description"
+      placeholder="Descripción (opcional)"
+      (keyup.enter)="createTask()"
+    />
+    <button (click)="createTask()" [disabled]="!newTask.title.trim()">
+      + Agregar
+    </button>
+  </div>
+  
+  <!-- Estado de carga -->
+  @if (loading()) {
+    <div class="loading">⏳ Cargando tareas...</div>
+  }
+  
+  <!-- Lista de tareas -->
+  @if (!loading()) {
+    @if (tasks().length === 0) {
+      <div class="empty-state">
+        ✨ No hay tareas. ¡Agrega una arriba!
+      </div>
+    } @else {
+      <div class="task-list">
+        @for (task of tasks(); track task.id) {
+          <div class="task-card" [class.completed]="task.completed">
+            <!-- SOLUCIÓN: Usar @if para asegurar que editingTask no es null -->
+            @if (editingTask && editingTask.id === task.id) {
+              <!-- Modo edición -->
+              <div class="edit-form">
+                <input
+                  type="text"
+                  [(ngModel)]="editingTask.title"
+                  placeholder="Título"
+                />
+                <input
+                  type="text"
+                  [(ngModel)]="editingTask.description"
+                  placeholder="Descripción"
+                />
+                <div class="edit-actions">
+                  <button (click)="saveEdit()">💾 Guardar</button>
+                  <button (click)="cancelEdit()">❌ Cancelar</button>
+                </div>
+              </div>
+            } @else {
+              <!-- Modo visualización -->
+              <div class="task-content">
+                <input
+                  type="checkbox"
+                  [checked]="task.completed"
+                  (change)="toggleTask(task)"
+                />
+                <div class="task-info">
+                  <span class="task-title">{{ task.title }}</span>
+                  @if (task.description) {
+                    <span class="task-description">{{ task.description }}</span>
+                  }
+                </div>
+                <div class="task-actions">
+                  <button class="edit-btn" (click)="startEdit(task)">✏️</button>
+                  <button class="delete-btn" (click)="deleteTask(task.id!)">🗑️</button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
