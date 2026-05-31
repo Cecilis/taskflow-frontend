@@ -109,6 +109,7 @@ Para producción, modifica src/environments/environment.prod.ts con la URL real 
 ## 📸 Captura de Pantalla
 
 [TaskFlow Pro - Pantalla principal](/screenshots/main-screen.png)
+📧 [ligiapuertas@gmail.com](mailto:ligiapuertas@gmail.com)
 ```
 
 
