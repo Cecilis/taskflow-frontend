@@ -48,7 +48,7 @@ taskflow-frontend/
 ├── angular.json
 ├── package.json
 └── tsconfig.json
-
+```
 
 ```markdown
 ## 🚀 Cómo Ejecutar Localmente
@@ -61,7 +61,7 @@ taskflow-frontend/
 | Angular CLI | 19 | `npm install -g @angular/cli` |
 | Git | - | [Git](https://git-scm.com/) |
 | Backend | - | [taskflow-backend](https://github.com/cecilis/taskflow-backend) corriendo en `http://localhost:8080` |
-
+```
 
 ### Instalación y Ejecución
 
@@ -71,12 +71,12 @@ taskflow-frontend/
 ```bash
 git clone https://github.com/TU_USUARIO/taskflow-frontend.git
 cd taskflow-frontend
-
+```
 
 #### 2. Instalar dependencias
 ```bash
 npm install
-
+```
 
 #### 3. Configurar la URL del backend (ver sección siguiente)
 
@@ -84,11 +84,10 @@ npm install
 #### 4. Ejecutar la aplicación
 ```bash
 ng serve
-
+```
 
 La aplicación estará disponible en http://localhost:4200
 
-```markdown
 ## ⚙️ Configuración de la API
 
 El frontend necesita conocer la URL del backend para funcionar correctamente.
@@ -100,6 +99,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api'
 };
+```
 
 Para producción, modifica src/environments/environment.prod.ts con la URL real de tu backend desplegado.
 
@@ -109,6 +109,8 @@ Para producción, modifica src/environments/environment.prod.ts con la URL real 
 ## 📸 Captura de Pantalla
 
 ![TaskFlow Pro - Pantalla principal](/screenshots/main-screen.png)
+
+```
 
 > *Agrega aquí una captura de pantalla de tu aplicación funcionando. Crea una carpeta `/screenshots` en la raíz del proyecto y coloca allí las imágenes.*
 
