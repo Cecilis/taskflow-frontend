@@ -69,7 +69,7 @@ taskflow-frontend/
 #### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/TU_USUARIO/taskflow-frontend.git
+git clone https://github.com/cecilis/taskflow-frontend.git
 cd taskflow-frontend
 ```
 
