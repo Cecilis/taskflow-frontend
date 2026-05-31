@@ -108,8 +108,7 @@ Para producción, modifica src/environments/environment.prod.ts con la URL real 
 ```markdown
 ## 📸 Captura de Pantalla
 
-![TaskFlow Pro - Pantalla principal](/screenshots/main-screen.png)
-
+[TaskFlow Pro - Pantalla principal](/screenshots/main-screen.png)
 ```
 
 
