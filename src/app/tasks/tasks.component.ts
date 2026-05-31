@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService, Task } from '../services/task.service';
@@ -13,10 +13,23 @@ import { TaskService, Task } from '../services/task.service';
 export class TasksComponent implements OnInit {
   private taskService = inject(TaskService);
   
-  // Signals para estado reactivo (nuevo en Angular 19)
+  // Signals para estado reactivo
   tasks = signal<Task[]>([]);
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
+  searchTerm = signal<string>('');  // ✅ NUEVO: término de búsqueda
+  
+  // ✅ NUEVO: tareas filtradas (se actualiza automáticamente cuando cambia tasks o searchTerm)
+  filteredTasks = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    if (!term) {
+      return this.tasks();
+    }
+    return this.tasks().filter(task => 
+      task.title.toLowerCase().includes(term) || 
+      (task.description && task.description.toLowerCase().includes(term))
+    );
+  });
   
   // Nueva tarea (para el formulario)
   newTask: Task = {
@@ -27,6 +40,12 @@ export class TasksComponent implements OnInit {
   
   // Tarea en edición
   editingTask: Task | null = null;
+  
+  // Propiedades para la importación CSV
+  selectedFile: File | null = null;
+  importing = signal<boolean>(false);
+  importMessage = signal<string | null>(null);
+  importError = signal<string | null>(null);
   
   ngOnInit(): void {
     this.loadTasks();
@@ -48,6 +67,22 @@ export class TasksComponent implements OnInit {
     });
   }
   
+  // ✅ NUEVO: actualizar término de búsqueda
+  updateSearchTerm(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+  }
+  
+  // ✅ NUEVO: limpiar búsqueda
+  clearSearch(): void {
+    this.searchTerm.set('');
+    // Limpiar el input visualmente
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  }
+  
   // Crear nueva tarea
   createTask(): void {
     if (!this.newTask.title.trim()) {
@@ -56,9 +91,7 @@ export class TasksComponent implements OnInit {
     
     this.taskService.createTask(this.newTask).subscribe({
       next: (newTask) => {
-        // Actualizar la lista con la nueva tarea (usando spread operator)
         this.tasks.update(tasks => [newTask, ...tasks]);
-        // Limpiar el formulario
         this.newTask = { title: '', description: '', completed: false };
       },
       error: (err) => {
@@ -71,7 +104,6 @@ export class TasksComponent implements OnInit {
   toggleTask(task: Task): void {
     this.taskService.toggleTaskStatus(task.id!).subscribe({
       next: (updatedTask) => {
-        // Actualizar la tarea en la lista
         this.tasks.update(tasks =>
           tasks.map(t => t.id === updatedTask.id ? updatedTask : t)
         );
@@ -84,7 +116,7 @@ export class TasksComponent implements OnInit {
   
   // Iniciar edición
   startEdit(task: Task): void {
-    this.editingTask = { ...task }; // Copia para no modificar el original
+    this.editingTask = { ...task };
   }
   
   // Guardar edición
@@ -114,7 +146,6 @@ export class TasksComponent implements OnInit {
     if (confirm('¿Estás seguro de eliminar esta tarea?')) {
       this.taskService.deleteTask(id).subscribe({
         next: () => {
-          // Filtrar la tarea eliminada
           this.tasks.update(tasks => tasks.filter(t => t.id !== id));
         },
         error: (err) => {
@@ -122,5 +153,44 @@ export class TasksComponent implements OnInit {
         }
       });
     }
+  }
+  
+  // Métodos para importación CSV
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.importMessage.set(null);
+      this.importError.set(null);
+    }
+  }
+  
+  importCSV(): void {
+    if (!this.selectedFile) {
+      this.importError.set('Por favor selecciona un archivo CSV');
+      return;
+    }
+    
+    this.importing.set(true);
+    this.importMessage.set(null);
+    this.importError.set(null);
+    
+    this.taskService.importTasksFromCSV(this.selectedFile).subscribe({
+      next: (response: any) => {
+        this.importing.set(false);
+        this.importMessage.set(`✅ ${response.importedCount} tareas importadas exitosamente`);
+        this.loadTasks();
+        this.selectedFile = null;
+        
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+        if (fileInput) {
+          fileInput.value = '';
+        }
+      },
+      error: (err: any) => {
+        this.importing.set(false);
+        this.importError.set(`❌ Error al importar: ${err.error?.error || err.message}`);
+      }
+    });
   }
 }

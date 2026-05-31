@@ -10,43 +10,118 @@
     </div>
   }
   
-  <!-- Formulario para nueva tarea -->
-  <div class="add-task">
-    <input
-      type="text"
-      [(ngModel)]="newTask.title"
-      placeholder="¿Qué necesitas hacer?"
-      (keyup.enter)="createTask()"
-    />
-    <input
-      type="text"
-      [(ngModel)]="newTask.description"
-      placeholder="Descripción (opcional)"
-      (keyup.enter)="createTask()"
-    />
-    <button (click)="createTask()" [disabled]="!newTask.title.trim()">
-      + Agregar
-    </button>
+  <!-- ============================================ -->
+  <!-- SECCIÓN 1: AGREGAR TAREA MANUAL              -->
+  <!-- ============================================ -->
+  <div class="add-task-section">
+    <h3>✏️ Agregar tarea manual</h3>
+    <div class="add-task">
+      <input
+        type="text"
+        [(ngModel)]="newTask.title"
+        placeholder="¿Qué necesitas hacer?"
+        (keyup.enter)="createTask()"
+      />
+      <input
+        type="text"
+        [(ngModel)]="newTask.description"
+        placeholder="Descripción (opcional)"
+        (keyup.enter)="createTask()"
+      />
+      <button (click)="createTask()" [disabled]="!newTask.title.trim()">
+        + Agregar
+      </button>
+    </div>
   </div>
   
-  <!-- Estado de carga -->
+  <!-- ============================================ -->
+  <!-- SECCIÓN 2: IMPORTAR CSV                      -->
+  <!-- ============================================ -->
+  <div class="import-section">
+    <h3>📁 Importar tareas desde archivo CSV</h3>
+    <div class="import-controls">
+      <input 
+        type="file" 
+        id="fileInput"
+        (change)="onFileSelected($event)" 
+        accept=".csv"
+      />
+      <button 
+        (click)="importCSV()" 
+        [disabled]="!selectedFile || importing()"
+      >
+        @if (importing()) {
+          ⏳ Importando...
+        } @else {
+          📤 Importar CSV
+        }
+      </button>
+    </div>
+    
+    @if (importMessage()) {
+      <div class="import-success">{{ importMessage() }}</div>
+    }
+    @if (importError()) {
+      <div class="import-error">{{ importError() }}</div>
+    }
+    
+    <details class="csv-example">
+      <summary>📄 Ver ejemplo de formato CSV</summary>
+      <pre>
+titulo,descripcion,completada
+Aprender Angular 19,Completar el tutorial de Signals,false
+Crear CRUD con Spring Boot,Implementar endpoints REST,false
+Conectar frontend con backend,Hacer que Angular consuma la API,true</pre>
+      <p class="hint">La primera línea debe contener: titulo,descripcion,completada</p>
+    </details>
+  </div>
+  
+  <!-- ============================================ -->
+  <!-- SECCIÓN 3: BUSCADOR DE TAREAS (NUEVO)        -->
+  <!-- ============================================ -->
+  <div class="search-section">
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Buscar tareas por título o descripción..."
+        (input)="updateSearchTerm($event)"
+        class="search-input"
+      />
+      @if (searchTerm()) {
+        <button (click)="clearSearch()" class="clear-search">✖</button>
+      }
+    </div>
+    <div class="search-info">
+      @if (searchTerm()) {
+        <span>🔎 Mostrando {{ filteredTasks().length }} de {{ tasks().length }} tareas</span>
+      }
+    </div>
+  </div>
+  
+  <!-- ============================================ -->
+  <!-- SECCIÓN 4: LISTA DE TAREAS                  -->
+  <!-- ============================================ -->
+  
   @if (loading()) {
     <div class="loading">⏳ Cargando tareas...</div>
   }
   
-  <!-- Lista de tareas -->
   @if (!loading()) {
-    @if (tasks().length === 0) {
+    @if (filteredTasks().length === 0 && !searchTerm()) {
       <div class="empty-state">
         ✨ No hay tareas. ¡Agrega una arriba!
       </div>
+    } @else if (filteredTasks().length === 0 && searchTerm()) {
+      <div class="empty-state">
+        🔍 No se encontraron tareas que coincidan con "{{ searchTerm() }}"
+      </div>
     } @else {
       <div class="task-list">
-        @for (task of tasks(); track task.id) {
+        @for (task of filteredTasks(); track task.id) {
           <div class="task-card" [class.completed]="task.completed">
-            <!-- SOLUCIÓN: Usar @if para asegurar que editingTask no es null -->
             @if (editingTask && editingTask.id === task.id) {
-              <!-- Modo edición -->
               <div class="edit-form">
                 <input
                   type="text"
@@ -64,7 +139,6 @@
                 </div>
               </div>
             } @else {
-              <!-- Modo visualización -->
               <div class="task-content">
                 <input
                   type="checkbox"

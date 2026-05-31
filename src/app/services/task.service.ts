@@ -47,4 +47,10 @@ export class TaskService {
   deleteTask(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  importTasksFromCSV(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post('http://localhost:8080/api/import/csv', formData);
+  }
 }

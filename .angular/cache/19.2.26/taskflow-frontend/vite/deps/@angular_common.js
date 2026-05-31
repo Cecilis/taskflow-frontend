@@ -87,7 +87,7 @@ import {
   provideNetlifyLoader,
   registerLocaleData,
   setRootDomAdapter
-} from "./chunk-HVET4NNQ.js";
+} from "./chunk-EZFX3QRR.js";
 import {
   DOCUMENT,
   PLATFORM_BROWSER_ID,
@@ -96,7 +96,7 @@ import {
   isPlatformBrowser,
   isPlatformServer,
   parseCookieValue
-} from "./chunk-B7JTXSY5.js";
+} from "./chunk-5JBIXXEP.js";
 import {
   IMAGE_CONFIG
 } from "./chunk-W435DIXL.js";

@@ -19,11 +19,28 @@ h1 {
   font-size: 14px;
 }
 
-/* Formulario agregar tarea */
+h3 {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* ============================================ */
+/* SECCIÓN 1: Agregar tarea manual */
+/* ============================================ */
+.add-task-section {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
 .add-task {
   display: flex;
   gap: 10px;
-  margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .add-task input {
@@ -49,26 +66,98 @@ h1 {
   cursor: not-allowed;
 }
 
-/* Mensajes */
-.error-message {
-  background-color: #f44336;
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
+/* ============================================ */
+/* SECCIÓN 2: Importar CSV */
+/* ============================================ */
+.import-section {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 20px;
   margin-bottom: 20px;
+}
+
+.import-controls {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.error-message button {
-  background: none;
-  border: none;
+.import-controls input[type="file"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.import-controls button {
+  padding: 10px 24px;
+  background-color: #2196F3;
   color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 14px;
 }
 
+.import-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.import-success {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.import-error {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.csv-example {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.csv-example summary {
+  cursor: pointer;
+  color: #2196F3;
+  font-weight: 500;
+}
+
+.csv-example pre {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+
+.hint {
+  color: #666;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* ============================================ */
+/* SECCIÓN 3: Lista de tareas */
+/* ============================================ */
 .loading {
   text-align: center;
   color: #2196F3;
@@ -82,7 +171,6 @@ h1 {
   font-size: 18px;
 }
 
-/* Lista de tareas */
 .task-list {
   display: flex;
   flex-direction: column;
@@ -111,7 +199,6 @@ h1 {
   color: #888;
 }
 
-/* Contenido de la tarea */
 .task-content {
   display: flex;
   align-items: center;
@@ -198,4 +285,81 @@ h1 {
 .edit-actions button:last-child {
   background-color: #9e9e9e;
   color: white;
+}
+
+/* Mensajes de error generales */
+.error-message {
+  background-color: #f44336;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error-message button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* ============================================ */
+/* SECCIÓN 3: BUSCADOR                          */
+/* ============================================ */
+.search-section {
+  margin: 20px 0;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 16px;
+  color: #999;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 40px 12px 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.clear-search {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #999;
+  padding: 4px 8px;
+}
+
+.clear-search:hover {
+  color: #f44336;
+}
+
+.search-info {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #666;
+  text-align: right;
 }
