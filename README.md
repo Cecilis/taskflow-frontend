@@ -112,7 +112,6 @@ Para producción, modifica src/environments/environment.prod.ts con la URL real 
 
 ```
 
-> *Agrega aquí una captura de pantalla de tu aplicación funcionando. Crea una carpeta `/screenshots` en la raíz del proyecto y coloca allí las imágenes.*
 
 ## 🔄 Próximas Mejoras
 
