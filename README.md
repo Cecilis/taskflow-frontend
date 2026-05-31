@@ -108,7 +108,9 @@ Para producción, modifica src/environments/environment.prod.ts con la URL real 
 
 ## 📸 Captura de Pantalla
 
-[TaskFlow Pro - Pantalla principal](/screenshots/main-screen.png)
+![Pantalla principal de TaskFlow Pro](screenshots/main-screen.png)
+
+*Lista de tareas, formulario de creación y buscador en funcionamiento*
 
 
 ## 🔄 Próximas Mejoras
